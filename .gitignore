@@ -1,0 +1,13 @@
+# Temporary work directory for cloning consumers
+temp_work/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Binary
+impact-detector
+main
+
+# OS specific
+.DS_Store
