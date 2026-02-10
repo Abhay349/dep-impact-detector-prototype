@@ -1,4 +1,4 @@
-# Dependency Impact Detector Prototype
+# Behavioral Impact Detector Prototype
 
 This tool prototype demonstrates how to detect breaking changes in downstream consumers of a Go library by running their test suites against your local changes.
 
