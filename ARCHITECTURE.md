@@ -4,7 +4,7 @@ This prototype implements a streamlined pipeline to detect breaking changes by e
 
 ## High-Level Workflow
 
-```mermaid
+```
 graph TD
     A[Start] --> B[Read Config (Consumers)]
     B --> C{For Each Consumer}
