@@ -4,7 +4,7 @@ This tool prototype demonstrates how to detect breaking changes in downstream co
 
 ## Demo Video
 
-[👉 Click here to watch the demo video 👈](./demo-video.mp4)
+[👉 Click here to watch the demo video 👈](./Prototype.mov)
 
 _(Note: Replace `./demo-video.mp4` with the actual path or YouTube link to your video)_
 
