@@ -36,7 +36,6 @@ func main() {
         log.Fatal("Error: -local flag is required")
     }
 
-    // Load Config
     cfgData, err := os.ReadFile(*configFile)
     if err != nil {
         log.Fatalf("Failed to read config file: %v", err)
@@ -46,12 +45,10 @@ func main() {
         log.Fatalf("Failed to parse config: %v", err)
     }
 
-    // Initialize Runner
     r, err := runner.NewRunner(*workDir)
     if err != nil {
         log.Fatalf("Failed to initialize runner: %v", err)
     }
-    // defer os.RemoveAll(*workDir) // Clean up disabled for demo/caching stability
 
     fmt.Printf("Analyzing impact of %s (local: %s) on %d consumers...\n", config.TargetModule, *localModulePath, len(config.Consumers))
 
@@ -66,17 +63,16 @@ func main() {
             continue
         }
 
-        // Determine module path (root of repo or subdir)
+        // Determine module path 
         modulePath := repoPath
         if consumer.ModuleDir != "" {
             modulePath = filepath.Join(repoPath, consumer.ModuleDir)
         }
 
-        // 2. Baseline Run (Current Published Version)
+        // 2. Baseline Run 
         fmt.Println("Running Baseline Tests...")
         baseOut, err := r.RunTests(modulePath, consumer.Packages)
         if err != nil {
-             // Tests might fail normally, continue analysis but warn
              fmt.Printf("Warning: Baseline execution had errors (exit code), check results.\n")
         }
         
@@ -99,7 +95,7 @@ func main() {
             continue
         }
 
-        // 5. Experiment Run (Local Version)
+        // 5. Experiment Run 
         fmt.Println("Running Experiment Tests...")
         expOut, err := r.RunTests(modulePath, consumer.Packages)
         if err != nil {
