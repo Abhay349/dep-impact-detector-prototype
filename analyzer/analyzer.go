@@ -8,7 +8,6 @@ import (
     "time"
 )
 
-// TestEvent represents a single line of output from 'go test -json'
 type TestEvent struct {
     Time    time.Time `json:"Time"`
     Action  string    `json:"Action"`
@@ -18,17 +17,14 @@ type TestEvent struct {
     Elapsed float64   `json:"Elapsed"`
 }
 
-// TestResult summarizes the outcome of a single test or package
 type TestResult struct {
     Name    string
     Status  string // pass, fail, skip
     Elapsed float64
 }
 
-// ResultMap maps Package -> TestName -> Result
 type ResultMap map[string]map[string]TestResult
 
-// ParseTestOutput reads JSON stream and returns structured results
 func ParseTestOutput(r io.Reader) (ResultMap, error) {
     scanner := bufio.NewScanner(r)
     results := make(ResultMap)
@@ -36,7 +32,6 @@ func ParseTestOutput(r io.Reader) (ResultMap, error) {
     for scanner.Scan() {
         var event TestEvent
         if err := json.Unmarshal(scanner.Bytes(), &event); err != nil {
-            // If line is not JSON (e.g. build output), skip or log
             continue
         }
 
@@ -48,7 +43,6 @@ func ParseTestOutput(r io.Reader) (ResultMap, error) {
             results[event.Package] = make(map[string]TestResult)
         }
 
-        // We care about terminal actions for tests: pass, fail, skip
         if event.Test != "" {
             if event.Action == "pass" || event.Action == "fail" || event.Action == "skip" {
                 results[event.Package][event.Test] = TestResult{
@@ -58,9 +52,7 @@ func ParseTestOutput(r io.Reader) (ResultMap, error) {
                 }
             }
         } else if event.Test == "" {
-            // Package level event
             if event.Action == "fail" || event.Action == "pass" {
-                // Could store package summary if needed
             }
         }
     }
@@ -71,11 +63,10 @@ func ParseTestOutput(r io.Reader) (ResultMap, error) {
     return results, nil
 }
 
-// CompareResults generates a diff between baseline and experiment
+
 func CompareResults(baseline, experiment ResultMap) string {
     var diff string
     
-    // Check for Regressions (Pass in Base -> Fail in Exp)
     regressions := 0
     for pkg, tests := range baseline {
         expTests, ok := experiment[pkg]
@@ -96,7 +87,6 @@ func CompareResults(baseline, experiment ResultMap) string {
         }
     }
 
-    // Check for Fixes (Fail in Base -> Pass in Exp)
     fixes := 0
     for pkg, tests := range baseline {
         expTests, ok := experiment[pkg]
